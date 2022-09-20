@@ -5,19 +5,24 @@ const mobileMenu = document.querySelector(`.mobile-menu`);
 const moveMobile = document.querySelector(`.menu`);
 const carroCompras = document.querySelector(`.navbar-shopping-cart`);
 const aside = document.querySelector(`.product-detail`);
-const cardsContainer = document.querySelector(`.cards-container`)
+const cardsContainer = document.querySelector(`.cards-container`);
+const productDetailContainer = document.querySelector(`.product-details`);
+const productDetailClose = document.querySelector(`.product-detail-close`);
 
 //Eventos
 navEmail.addEventListener(`click`, toggleDesktopMenu);
 moveMobile.addEventListener(`click`, toggleMobileMenu);
 carroCompras.addEventListener(`click`, toggleMenuCompras);
+productDetailClose.addEventListener(`click`, closeProductDetailAside);
 
 //Funciones
 function toggleDesktopMenu(){
     const isAsideClosed = aside.classList.contains(`inactive`);
+    const isToggleProductDetailClosed = productDetailContainer.classList.contains(`inactive`);
 
-    if(!isAsideClosed){
+    if(!isAsideClosed || !isToggleProductDetailClosed){
         aside.classList.add(`inactive`);
+        productDetailContainer.classList.add(`inactive`);
     }
     desktopMenu.classList.toggle(`inactive`)
 }
@@ -32,12 +37,28 @@ function toggleMobileMenu(){
 function toggleMenuCompras(){
     const isMobileMenuClosed = mobileMenu.classList.contains(`inactive`);
     const isToggleDesktopMenuClosed = desktopMenu.classList.contains(`inactive`);
-
-    if(!isMobileMenuClosed || !isToggleDesktopMenuClosed){
+    const isToggleProductDetailClosed = productDetailContainer.classList.contains(`inactive`);
+    if(!isMobileMenuClosed || !isToggleDesktopMenuClosed || !isToggleProductDetailClosed){
         mobileMenu.classList.add(`inactive`);
         desktopMenu.classList.add(`inactive`);
+        productDetailContainer.classList.add(`inactive`);
     }
     aside.classList.toggle(`inactive`);
+}
+function openProductDetailAside(){
+    const isMobileMenuClosed = mobileMenu.classList.contains(`inactive`);
+    const isToggleDesktopMenuClosed = desktopMenu.classList.contains(`inactive`);
+    const isToggleMenuComprasClosed = aside.classList.contains(`inactive`);
+
+    if(!isMobileMenuClosed || !isToggleDesktopMenuClosed || !isToggleMenuComprasClosed){
+        mobileMenu.classList.add(`inactive`);
+        desktopMenu.classList.add(`inactive`);
+        aside.classList.add(`inactive`);
+    }
+    productDetailContainer.classList.remove(`inactive`);
+}
+function closeProductDetailAside(){
+    productDetailContainer.classList.add(`inactive`);
 }
 //agregar elementos a la pagina web
 //creamos una array donde se guardan la lista de productos
@@ -148,6 +169,7 @@ function renderProducts(arr){
     
         const productImg = document.createElement(`img`);
         productImg.setAttribute(`src`, product.image);
+        productImg.addEventListener(`click`, openProductDetailAside);
     
         const productInfo = document.createElement(`div`);
         productInfo.classList.add(`product-info`);
